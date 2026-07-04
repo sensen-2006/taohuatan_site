@@ -1,61 +1,160 @@
 import { useState } from 'react';
-import { Link } from 'react-router';
-import { Star, Globe, Clock, Users, MessageCircle } from 'lucide-react';
+import { useNavigate } from 'react-router';
+import { Clock, Globe, Star, Users } from 'lucide-react';
 import { PageBanner } from '../../components/shared/PageBanner';
 import { IMAGES } from '../../components/shared/images';
+import { buildGuideDraft, getUpcomingBookingDates, guideBookingData } from '../../data/booking';
+import { useDemoApp } from '../../providers/DemoAppProvider';
 
-const GUIDES = [
-  { id: 1, name: '张老师', avatar: '👨‍🏫', rating: 4.9, reviews: 326, price: 200, languages: ['中文', 'English'], specialty: '桃花潭历史文化', experience: '8年', tours: 1200, intro: '资深讲解员，专精唐诗文化与桃花潭历史' },
-  { id: 2, name: '李导', avatar: '👩‍🏫', rating: 4.8, reviews: 218, price: 250, languages: ['中文', 'English', '日本語'], specialty: '查济古建筑', experience: '6年', tours: 860, intro: '建筑学背景，擅长徽派建筑讲解' },
-  { id: 3, name: '王导', avatar: '🧑‍🏫', rating: 4.7, reviews: 156, price: 180, languages: ['中文'], specialty: '太平湖生态', experience: '5年', tours: 650, intro: '自然爱好者，熟悉太平湖生态环境' },
-  { id: 4, name: '陈导', avatar: '👩‍🎓', rating: 4.9, reviews: 412, price: 300, languages: ['中文', 'English', 'Français'], specialty: '全域文旅', experience: '10年', tours: 2100, intro: '全能型导游，三语讲解，深度文化游首选' },
-];
+const DATE_OPTIONS = getUpcomingBookingDates(7);
+const SESSION_OPTIONS = ['09:00 - 11:00', '14:00 - 16:00', '16:30 - 18:00'];
+const LANGUAGE_FILTERS = ['全部', '中文', 'English', '日语', 'Français'];
 
 export function GuidesPage() {
-  const [langFilter, setLangFilter] = useState('全部');
+  const navigate = useNavigate();
+  const { saveBookingDraft } = useDemoApp();
+  const [languageFilter, setLanguageFilter] = useState('全部');
+  const [serviceDate, setServiceDate] = useState(DATE_OPTIONS[0].value);
+  const [sessionLabel, setSessionLabel] = useState(SESSION_OPTIONS[0]);
+
+  const visibleGuides = guideBookingData.filter(
+    (guide) => languageFilter === '全部' || guide.languages.includes(languageFilter),
+  );
+
+  const handleBookGuide = (guideId: string) => {
+    const guide = guideBookingData.find((item) => item.id === guideId);
+    if (!guide) return;
+    saveBookingDraft(buildGuideDraft({ guide, serviceDate, sessionLabel }));
+    navigate('/booking/confirm');
+  };
 
   return (
     <div>
-      <PageBanner image={IMAGES.tourGuide} title="导游预约" subtitle="专业讲解员，带你深度了解文化底蕴" breadcrumbs={[{ label: '首页', path: '/' }, { label: '在线预约', path: '/booking' }, { label: '导游预约' }]} />
+      <PageBanner
+        image={IMAGES.tourGuide}
+        title="导游讲解预约"
+        subtitle="通过选择讲解老师与服务时段，补足平台在服务型产品上的演示能力。"
+        breadcrumbs={[
+          { label: '首页', path: '/' },
+          { label: '在线预约', path: '/booking' },
+          { label: '导游讲解' },
+        ]}
+      />
 
-      <section className="py-8 px-8 bg-white border-b border-gray-100">
-        <div className="max-w-[1280px] mx-auto flex gap-3 items-center">
-          <Globe className="w-4 h-4 text-gray-400" />
-          {['全部', '中文', 'English', '日本語', 'Français'].map(l => (
-            <button key={l} onClick={() => setLangFilter(l)} className={`px-4 py-2 rounded-full text-sm transition-all ${langFilter === l ? 'bg-[#0077B3] text-white' : 'bg-gray-100 text-gray-600 hover:bg-gray-200'}`}>{l}</button>
-          ))}
+      <section className="border-b border-gray-100 bg-white px-8 py-8">
+        <div className="mx-auto grid max-w-[1280px] grid-cols-1 gap-4 lg:grid-cols-[1.2fr_auto_auto] lg:items-center">
+          <div className="flex flex-wrap items-center gap-3">
+            <Globe className="h-4 w-4 text-[#7A868B]" />
+            {LANGUAGE_FILTERS.map((language) => (
+              <button
+                key={language}
+                type="button"
+                onClick={() => setLanguageFilter(language)}
+                className={`rounded-full px-4 py-2 text-sm ${
+                  languageFilter === language
+                    ? 'bg-[#486B72] text-white'
+                    : 'bg-[#F3F4F4] text-[#52636A] hover:bg-[#E8EBEB]'
+                }`}
+              >
+                {language}
+              </button>
+            ))}
+          </div>
+          <label className="flex items-center gap-3 rounded-full border border-[#E8E1D2] bg-[#FAF7F1] px-4 py-3 text-sm text-[#52636A]">
+            <span>服务日期</span>
+            <select
+              value={serviceDate}
+              onChange={(event) => setServiceDate(event.target.value)}
+              className="bg-transparent text-[#24343B] outline-none"
+            >
+              {DATE_OPTIONS.map((option) => (
+                <option key={option.value} value={option.value}>
+                  {option.value} {option.weekday}
+                </option>
+              ))}
+            </select>
+          </label>
+          <label className="flex items-center gap-3 rounded-full border border-[#E8E1D2] bg-[#FAF7F1] px-4 py-3 text-sm text-[#52636A]">
+            <span>服务时段</span>
+            <select
+              value={sessionLabel}
+              onChange={(event) => setSessionLabel(event.target.value)}
+              className="bg-transparent text-[#24343B] outline-none"
+            >
+              {SESSION_OPTIONS.map((option) => (
+                <option key={option} value={option}>
+                  {option}
+                </option>
+              ))}
+            </select>
+          </label>
         </div>
       </section>
 
-      <section className="py-12 px-8">
-        <div className="max-w-[1280px] mx-auto grid grid-cols-1 md:grid-cols-2 gap-8">
-          {GUIDES.filter(g => langFilter === '全部' || g.languages.includes(langFilter)).map(guide => (
-            <div key={guide.id} className="bg-white rounded-2xl p-8 shadow-sm border border-gray-100 hover:shadow-lg transition-shadow">
+      <section className="px-8 py-12">
+        <div className="mx-auto grid max-w-[1280px] grid-cols-1 gap-8 md:grid-cols-2">
+          {visibleGuides.map((guide) => (
+            <article
+              key={guide.id}
+              className="rounded-[30px] border border-gray-100 bg-white p-8 shadow-sm hover:shadow-lg"
+            >
               <div className="flex items-start gap-6">
-                <div className="w-20 h-20 rounded-2xl bg-gradient-to-br from-[#0077B3]/20 to-[#0EA5E9]/20 flex items-center justify-center text-4xl">{guide.avatar}</div>
+                <div className="flex h-20 w-20 items-center justify-center rounded-[24px] bg-[linear-gradient(135deg,#E8F1F2,#F4EFE6)] text-3xl font-bold text-[#486B72]">
+                  {guide.avatar}
+                </div>
                 <div className="flex-1">
-                  <div className="flex items-start justify-between">
+                  <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
                     <div>
-                      <h3 className="text-xl font-bold" style={{ fontFamily: '"Noto Serif SC", serif' }}>{guide.name}</h3>
-                      <p className="text-gray-400 text-sm">{guide.specialty}</p>
+                      <h2 className="text-2xl font-bold text-[#24343B]">{guide.name}</h2>
+                      <p className="mt-1 text-sm text-[#6A7A80]">{guide.specialty}</p>
                     </div>
-                    <div className="text-right">
-                      <p className="text-2xl font-bold text-[#FFB114]">¥{guide.price}<span className="text-xs text-gray-400 font-normal">/次</span></p>
+                    <div className="text-left sm:text-right">
+                      <p className="text-3xl font-bold text-[#C9932C]">￥{guide.price}</p>
+                      <p className="text-xs text-[#7A868B]">每场讲解服务</p>
                     </div>
                   </div>
-                  <p className="text-gray-500 text-sm my-3">{guide.intro}</p>
-                  <div className="flex flex-wrap gap-4 text-xs text-gray-400 mb-4">
-                    <span className="flex items-center gap-1"><Star className="w-3.5 h-3.5 text-[#FFB114]" />{guide.rating} ({guide.reviews}条)</span>
-                    <span className="flex items-center gap-1"><Clock className="w-3.5 h-3.5" />{guide.experience}经验</span>
-                    <span className="flex items-center gap-1"><Users className="w-3.5 h-3.5" />{guide.tours}次服务</span>
+
+                  <p className="mt-4 text-sm leading-7 text-[#52636A]">{guide.intro}</p>
+                  <div className="mt-5 flex flex-wrap gap-4 text-sm text-[#66767D]">
+                    <span className="inline-flex items-center gap-1">
+                      <Star className="h-4 w-4 fill-[#C9932C] text-[#C9932C]" />
+                      {guide.rating}（{guide.reviews} 条）
+                    </span>
+                    <span className="inline-flex items-center gap-1">
+                      <Clock className="h-4 w-4" />
+                      从业 {guide.experience}
+                    </span>
+                    <span className="inline-flex items-center gap-1">
+                      <Users className="h-4 w-4" />
+                      服务 {guide.tours} 次
+                    </span>
                   </div>
-                  <div className="flex items-center justify-between">
-                    <div className="flex gap-2">{guide.languages.map(l => <span key={l} className="text-xs bg-[#0077B3]/10 text-[#0077B3] px-2 py-0.5 rounded-full">{l}</span>)}</div>
-                    <Link to="/booking/confirm" className="bg-[#FFB114] hover:bg-[#e9a010] text-white px-6 py-2 rounded-full text-sm font-medium transition-colors">预约</Link>
+                  <div className="mt-5 flex flex-wrap gap-2">
+                    {guide.languages.map((language) => (
+                      <span
+                        key={language}
+                        className="rounded-full bg-[#E8F1F2] px-3 py-1 text-xs text-[#486B72]"
+                      >
+                        {language}
+                      </span>
+                    ))}
+                  </div>
+
+                  <div className="mt-6 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+                    <p className="text-xs leading-6 text-[#7A868B]">
+                      演示预约将自动带入当前选择的服务日期与时段。
+                    </p>
+                    <button
+                      type="button"
+                      onClick={() => handleBookGuide(guide.id)}
+                      className="rounded-full bg-[#C9932C] px-6 py-3 text-sm font-semibold text-white hover:bg-[#b58323]"
+                    >
+                      预约该导游
+                    </button>
                   </div>
                 </div>
               </div>
-            </div>
+            </article>
           ))}
         </div>
       </section>

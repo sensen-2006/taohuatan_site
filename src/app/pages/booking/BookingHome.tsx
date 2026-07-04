@@ -1,42 +1,140 @@
 import { Link } from 'react-router';
 import { motion } from 'motion/react';
-import { Ticket, Hotel, UserCheck, Package, ArrowRight, Star, Clock } from 'lucide-react';
+import { ArrowRight, Hotel, Package, Ticket, UserCheck } from 'lucide-react';
 import { PageBanner } from '../../components/shared/PageBanner';
 import { SectionTitle } from '../../components/shared/SectionTitle';
-import { IMAGES } from '../../components/shared/images';
 import { ImageWithFallback } from '../../components/figma/ImageWithFallback';
+import { IMAGES } from '../../components/shared/images';
 
 const SERVICES = [
-  { icon: <Ticket className="w-8 h-8" />, title: '门票预约', desc: '景区电子门票，扫码入园，无需排队', link: '/booking/tickets', color: 'from-[#FFB114] to-[#F59E0B]', price: '¥65起' },
-  { icon: <Hotel className="w-8 h-8" />, title: '酒店民宿', desc: '精选徽派民宿、星级酒店，品质住宿', link: '/booking/hotels', color: 'from-[#0077B3] to-[#0EA5E9]', price: '¥288起' },
-  { icon: <UserCheck className="w-8 h-8" />, title: '导游预约', desc: '专业讲解员，深度文化游览', link: '/booking/guides', color: 'from-[#39C668] to-[#34D399]', price: '¥200起' },
-  { icon: <Package className="w-8 h-8" />, title: '套餐产品', desc: '门票+住宿+导游超值组合套餐', link: '/booking/packages', color: 'from-[#8B5CF6] to-[#A78BFA]', price: '¥588起' },
+  {
+    icon: <Ticket className="h-8 w-8" />,
+    title: '门票预约',
+    desc: '选择景点、日期、票种与人数，直接进入演示下单流程。',
+    link: '/booking/tickets',
+    color: 'from-[#C9932C] to-[#E0B44C]',
+    price: '￥65 起',
+  },
+  {
+    icon: <Hotel className="h-8 w-8" />,
+    title: '酒店民宿',
+    desc: '覆盖桃花潭、查济与太平湖周边住宿，支持演示预订。',
+    link: '/booking/hotels',
+    color: 'from-[#486B72] to-[#6A8C92]',
+    price: '￥288 起',
+  },
+  {
+    icon: <UserCheck className="h-8 w-8" />,
+    title: '导游讲解',
+    desc: '选择讲解老师与服务时段，补足平台服务型产品形态。',
+    link: '/booking/guides',
+    color: 'from-[#6F8F63] to-[#8FA37E]',
+    price: '￥180 起',
+  },
+  {
+    icon: <Package className="h-8 w-8" />,
+    title: '精选套餐',
+    desc: '门票、住宿、讲解打包组合，适合展示整合能力。',
+    link: '/booking/packages',
+    color: 'from-[#8A6B4F] to-[#A38260]',
+    price: '￥268 起',
+  },
 ];
 
 const HOT_PRODUCTS = [
-  { name: '桃花潭+查济双景联票', price: '¥108', original: '¥123', image: IMAGES.lakeMountain, sales: 2856 },
-  { name: '太平湖游船观光票', price: '¥80', original: '¥100', image: IMAGES.lakeBoat, sales: 1432 },
-  { name: '查济古村门票', price: '¥58', original: '¥68', image: IMAGES.bridgeVillage, sales: 1923 },
-  { name: '两日深度游套餐', price: '¥688', original: '¥888', image: IMAGES.sunsetLake, sales: 856 },
+  {
+    name: '桃花潭 + 查济联票',
+    price: '￥108',
+    original: '￥143',
+    image: IMAGES.lakeMountain,
+    sales: 2856,
+    link: '/booking/tickets',
+  },
+  {
+    name: '查济古韵民宿',
+    price: '￥388',
+    original: '￥488',
+    image: IMAGES.bridgeVillage,
+    sales: 1268,
+    link: '/booking/hotels',
+  },
+  {
+    name: '张老师讲解服务',
+    price: '￥200',
+    original: '￥260',
+    image: IMAGES.tourGuide,
+    sales: 926,
+    link: '/booking/guides',
+  },
+  {
+    name: '两日深度套餐',
+    price: '￥688',
+    original: '￥958',
+    image: IMAGES.sunsetLake,
+    sales: 856,
+    link: '/booking/packages',
+  },
 ];
 
 export function BookingHome() {
   return (
     <div>
-      <PageBanner image={IMAGES.garden} title="在线预约" subtitle="门票、酒店、导游一站式预订，轻松开启旅程" breadcrumbs={[{ label: '首页', path: '/' }, { label: '在线预约' }]} />
+      <PageBanner
+        image={IMAGES.garden}
+        title="在线预约"
+        subtitle="围绕桃花潭、查济与太平湖，完成一条可展示、可答辩、可部署的前端预约闭环。"
+        breadcrumbs={[{ label: '首页', path: '/' }, { label: '在线预约' }]}
+      />
 
-      {/* Service Cards */}
-      <section className="py-16 px-8">
-        <div className="max-w-[1280px] mx-auto">
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-            {SERVICES.map((s, i) => (
-              <motion.div key={s.title} initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: i * 0.1 }}>
-                <Link to={s.link} className="group block bg-white rounded-2xl p-8 shadow-sm hover:shadow-xl transition-all border border-gray-100 text-center h-full">
-                  <div className={`w-16 h-16 rounded-2xl bg-gradient-to-br ${s.color} text-white flex items-center justify-center mx-auto mb-4`}>{s.icon}</div>
-                  <h3 className="text-xl font-bold mb-2" style={{ fontFamily: '"Noto Serif SC", serif' }}>{s.title}</h3>
-                  <p className="text-gray-500 text-sm mb-4">{s.desc}</p>
-                  <p className="text-[#FFB114] font-bold text-lg mb-3">{s.price}</p>
-                  <span className="inline-flex items-center gap-1 text-[#0077B3] text-sm font-medium group-hover:gap-2 transition-all">立即预订 <ArrowRight className="w-4 h-4" /></span>
+      <section className="px-8 py-16">
+        <div className="mx-auto max-w-[1280px]">
+          <div className="mb-10 rounded-[32px] border border-[#E8E1D2] bg-[linear-gradient(135deg,rgba(247,242,233,0.96),rgba(255,255,255,0.96))] p-8 shadow-sm">
+            <p className="text-sm tracking-[0.28em] text-[#8D7556]">DEMO JOURNEY</p>
+            <h2 className="mt-3 text-3xl font-bold text-[#24343B]">推荐答辩演示入口</h2>
+            <p className="mt-3 max-w-3xl text-sm leading-8 text-[#52636A]">
+              从“门票预约”进入，选择景点、日期、票种与人数后，可依次进入订单确认、在线支付、预约成功，再跳转“我的订单”完成闭环展示。
+            </p>
+            <div className="mt-6 flex flex-wrap gap-3">
+              <Link
+                to="/booking/tickets"
+                className="rounded-full bg-[#C9932C] px-6 py-3 text-sm font-semibold text-white hover:bg-[#b58323]"
+              >
+                从门票预约开始
+              </Link>
+              <Link
+                to="/booking/packages"
+                className="rounded-full bg-[#F4EFE6] px-6 py-3 text-sm font-medium text-[#41535F] hover:bg-[#e9decc]"
+              >
+                查看套餐方案
+              </Link>
+            </div>
+          </div>
+
+          <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
+            {SERVICES.map((service, index) => (
+              <motion.div
+                key={service.title}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: index * 0.08 }}
+              >
+                <Link
+                  to={service.link}
+                  className="group block h-full rounded-[28px] border border-gray-100 bg-white p-8 text-center shadow-sm hover:-translate-y-1 hover:shadow-xl"
+                >
+                  <div
+                    className={`mx-auto mb-5 flex h-16 w-16 items-center justify-center rounded-2xl bg-gradient-to-br ${service.color} text-white`}
+                  >
+                    {service.icon}
+                  </div>
+                  <h3 className="text-xl font-bold text-[#24343B]">{service.title}</h3>
+                  <p className="mt-3 text-sm leading-7 text-[#66767D]">{service.desc}</p>
+                  <p className="mt-4 text-lg font-bold text-[#C9932C]">{service.price}</p>
+                  <span className="mt-4 inline-flex items-center gap-1 text-sm font-medium text-[#486B72] group-hover:gap-2">
+                    立即进入
+                    <ArrowRight className="h-4 w-4" />
+                  </span>
                 </Link>
               </motion.div>
             ))}
@@ -44,25 +142,43 @@ export function BookingHome() {
         </div>
       </section>
 
-      {/* Hot Products */}
-      <section className="py-16 px-8 bg-gradient-to-b from-white to-[#F6F8F8]">
-        <div className="max-w-[1280px] mx-auto">
-          <SectionTitle title="热门产品" subtitle="最受欢迎的预约产品" english="HOT PRODUCTS" />
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-            {HOT_PRODUCTS.map((p, i) => (
-              <motion.div key={p.name} initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: i * 0.1 }}>
-                <Link to="/booking/tickets" className="group block bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-lg transition-all">
-                  <div className="h-40 overflow-hidden relative">
-                    <ImageWithFallback src={p.image} alt={p.name} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" />
-                    <div className="absolute top-3 left-3 bg-red-500 text-white text-xs px-2 py-0.5 rounded-full">热销</div>
-                  </div>
-                  <div className="p-4">
-                    <h4 className="font-bold text-sm mb-2">{p.name}</h4>
-                    <div className="flex items-baseline gap-2">
-                      <span className="text-[#FFB114] font-bold text-lg">{p.price}</span>
-                      <span className="text-gray-300 text-xs line-through">{p.original}</span>
+      <section className="bg-gradient-to-b from-white to-[#F5F7F6] px-8 py-16">
+        <div className="mx-auto max-w-[1280px]">
+          <SectionTitle
+            title="热门预约产品"
+            subtitle="用更接近真实业务的产品卡片，承接预约入口与订单演示。"
+            english="BOOKING HIGHLIGHTS"
+          />
+          <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
+            {HOT_PRODUCTS.map((product, index) => (
+              <motion.div
+                key={product.name}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: index * 0.08 }}
+              >
+                <Link
+                  to={product.link}
+                  className="group block overflow-hidden rounded-[28px] border border-gray-100 bg-white shadow-sm hover:shadow-lg"
+                >
+                  <div className="relative h-44 overflow-hidden">
+                    <ImageWithFallback
+                      src={product.image}
+                      alt={product.name}
+                      className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
+                    />
+                    <div className="absolute left-4 top-4 rounded-full bg-[#C9932C] px-3 py-1 text-xs text-white">
+                      推荐
                     </div>
-                    <p className="text-gray-400 text-xs mt-1">已售 {p.sales}</p>
+                  </div>
+                  <div className="p-5">
+                    <h4 className="text-sm font-bold text-[#24343B]">{product.name}</h4>
+                    <div className="mt-3 flex items-baseline gap-2">
+                      <span className="text-xl font-bold text-[#C9932C]">{product.price}</span>
+                      <span className="text-xs text-gray-300 line-through">{product.original}</span>
+                    </div>
+                    <p className="mt-2 text-xs text-[#7A868B]">演示销量 {product.sales}</p>
                   </div>
                 </Link>
               </motion.div>
@@ -71,20 +187,43 @@ export function BookingHome() {
         </div>
       </section>
 
-      {/* Quick Links */}
-      <section className="py-16 px-8">
-        <div className="max-w-[1280px] mx-auto grid grid-cols-1 md:grid-cols-3 gap-6">
-          <Link to="/booking/refund" className="bg-white rounded-2xl p-6 border border-gray-100 hover:shadow-md transition-shadow flex items-center gap-4">
-            <div className="w-12 h-12 rounded-xl bg-red-50 text-red-500 flex items-center justify-center text-xl">🔄</div>
-            <div><h4 className="font-bold text-sm">退改签</h4><p className="text-gray-400 text-xs">订单退票、改签申请</p></div>
+      <section className="px-8 py-16">
+        <div className="mx-auto grid max-w-[1280px] grid-cols-1 gap-6 md:grid-cols-3">
+          <Link
+            to="/booking/refund"
+            className="flex items-center gap-4 rounded-[24px] border border-gray-100 bg-white p-6 shadow-sm hover:shadow-md"
+          >
+            <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-[#F6E7E5] text-lg font-bold text-[#9B4C46]">
+              退
+            </div>
+            <div>
+              <h4 className="text-sm font-bold text-[#24343B]">退票与改签</h4>
+              <p className="mt-1 text-xs text-[#7A868B]">展示售后查询、退票申请与改签流程。</p>
+            </div>
           </Link>
-          <Link to="/user/orders" className="bg-white rounded-2xl p-6 border border-gray-100 hover:shadow-md transition-shadow flex items-center gap-4">
-            <div className="w-12 h-12 rounded-xl bg-blue-50 text-blue-500 flex items-center justify-center text-xl">📋</div>
-            <div><h4 className="font-bold text-sm">我的订单</h4><p className="text-gray-400 text-xs">查看订单状态与详情</p></div>
+          <Link
+            to="/booking/invoice"
+            className="flex items-center gap-4 rounded-[24px] border border-gray-100 bg-white p-6 shadow-sm hover:shadow-md"
+          >
+            <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-[#E8F1F2] text-lg font-bold text-[#486B72]">
+              票
+            </div>
+            <div>
+              <h4 className="text-sm font-bold text-[#24343B]">发票申请</h4>
+              <p className="mt-1 text-xs text-[#7A868B]">对最新演示订单提交电子发票申请。</p>
+            </div>
           </Link>
-          <Link to="/support/faq" className="bg-white rounded-2xl p-6 border border-gray-100 hover:shadow-md transition-shadow flex items-center gap-4">
-            <div className="w-12 h-12 rounded-xl bg-green-50 text-green-500 flex items-center justify-center text-xl">❓</div>
-            <div><h4 className="font-bold text-sm">常见问题</h4><p className="text-gray-400 text-xs">预订相关问题解答</p></div>
+          <Link
+            to="/user/orders"
+            className="flex items-center gap-4 rounded-[24px] border border-gray-100 bg-white p-6 shadow-sm hover:shadow-md"
+          >
+            <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-[#EEF2E8] text-lg font-bold text-[#6F8F63]">
+              单
+            </div>
+            <div>
+              <h4 className="text-sm font-bold text-[#24343B]">我的订单</h4>
+              <p className="mt-1 text-xs text-[#7A868B]">成功页可直接跳转到这里，作为预约闭环终点。</p>
+            </div>
           </Link>
         </div>
       </section>

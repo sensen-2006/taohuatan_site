@@ -1,31 +1,86 @@
 import { useState } from 'react';
-import { Link } from 'react-router';
-import { MapPin, Phone, Mail, Clock, ChevronDown, ChevronUp, Car, Bus, Train, ArrowRight, AlertCircle, Calendar, ExternalLink, CheckCircle } from 'lucide-react';
+import { Link, useParams } from 'react-router';
+import {
+  Bus,
+  Car,
+  CheckCircle,
+  ChevronDown,
+  ChevronUp,
+  Clock,
+  Mail,
+  MapPin,
+  Phone,
+  Train,
+} from 'lucide-react';
 import { PageBanner } from '../../components/shared/PageBanner';
-import { SectionTitle } from '../../components/shared/SectionTitle';
 import { IMAGES } from '../../components/shared/images';
 import { ImageWithFallback } from '../../components/figma/ImageWithFallback';
+import { announcementData, announcementMap } from '../../data/support';
+import { ContentNotFound } from '../../components/shared/ContentNotFound';
 
-// About Us
+function FaqItem({
+  title,
+  content,
+}: {
+  title: string;
+  content: string;
+}) {
+  const [open, setOpen] = useState(false);
+
+  return (
+    <div className="rounded-[22px] border border-gray-100 bg-white p-5 shadow-sm">
+      <button
+        type="button"
+        onClick={() => setOpen((current) => !current)}
+        className="flex w-full items-center justify-between gap-4 text-left"
+      >
+        <span className="font-bold text-[#24343B]">{title}</span>
+        {open ? <ChevronUp className="h-4 w-4 text-[#8B989D]" /> : <ChevronDown className="h-4 w-4 text-[#8B989D]" />}
+      </button>
+      {open ? <p className="mt-4 text-sm leading-7 text-[#52636A]">{content}</p> : null}
+    </div>
+  );
+}
+
 export function AboutPage() {
   return (
     <div>
-      <PageBanner image={IMAGES.lakeMountain} title="关于我们" subtitle="桃花潭景区数字化展示与预约平台" breadcrumbs={[{ label: '首页', path: '/' }, { label: '关于我们' }]} />
-      <section className="py-16 px-8">
-        <div className="max-w-[900px] mx-auto">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-10 mb-16">
-            <div className="rounded-2xl overflow-hidden h-72"><ImageWithFallback src={IMAGES.lakeMountain} alt="桃花潭" className="w-full h-full object-cover" /></div>
+      <PageBanner
+        image={IMAGES.lakeMountain}
+        title="关于我们"
+        subtitle="桃花潭景区数字化展示与预约平台项目说明"
+        breadcrumbs={[{ label: '首页', path: '/' }, { label: '关于我们' }]}
+      />
+      <section className="px-8 py-16">
+        <div className="mx-auto max-w-[960px]">
+          <div className="mb-16 grid grid-cols-1 gap-10 md:grid-cols-2">
+            <div className="h-72 overflow-hidden rounded-[28px]">
+              <ImageWithFallback
+                src={IMAGES.lakeMountain}
+                alt="桃花潭平台视觉图"
+                className="h-full w-full object-cover"
+              />
+            </div>
             <div className="flex flex-col justify-center">
-              <h2 className="text-2xl font-bold mb-4" style={{ fontFamily: '"Noto Serif SC", serif' }}>平台介绍</h2>
-              <p className="text-gray-600 leading-relaxed mb-4">桃花潭景区数字化展示与预约平台是安徽省泾县文旅局主导建设的智慧旅游项目，旨在为游客提供一站式的景区信息查询、路线规划、在线预约和社区互动服务。</p>
-              <p className="text-gray-600 leading-relaxed">平台涵盖桃花潭、查济古村、太平湖等核心景区，通过数字化手段展示徽州文化的独特魅力，让更多人了解并爱上这片土地。</p>
+              <h2 className="text-2xl font-bold text-[#24343B]">平台定位</h2>
+              <p className="mt-4 text-sm leading-8 text-[#52636A]">
+                本项目围绕安徽泾县桃花潭、查济古村、太平湖等文旅资源展开，目标是完成一个可展示、可答辩、可部署的前端文旅数字平台。
+              </p>
+              <p className="mt-4 text-sm leading-8 text-[#52636A]">
+                当前版本重点展示景点内容、路线规划、预约闭环、社区互动和个人中心等能力。登录、支付、订单、社区发布均为 mock 演示。
+              </p>
             </div>
           </div>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            {[{ num: '100万+', label: '年接待游客' }, { num: '15+', label: '核心景点' }, { num: '4.8', label: '平均评分' }].map(s => (
-              <div key={s.label} className="text-center bg-gradient-to-br from-[#FFB114]/10 to-[#0077B3]/10 rounded-2xl p-8">
-                <p className="text-4xl font-bold text-[#FFB114] mb-2">{s.num}</p>
-                <p className="text-gray-500 text-sm">{s.label}</p>
+
+          <div className="grid grid-cols-1 gap-6 md:grid-cols-3">
+            {[
+              { num: '4 大', label: '核心业务板块' },
+              { num: '20+', label: '可点击演示页面' },
+              { num: '1 条', label: '完整预约闭环主线' },
+            ].map((item) => (
+              <div key={item.label} className="rounded-[24px] bg-gradient-to-br from-[#F7F2E8] to-[#EEF3F1] p-8 text-center">
+                <p className="text-4xl font-bold text-[#C9932C]">{item.num}</p>
+                <p className="mt-2 text-sm text-[#617178]">{item.label}</p>
               </div>
             ))}
           </div>
@@ -35,42 +90,58 @@ export function AboutPage() {
   );
 }
 
-// Contact Us
 export function ContactPage() {
   return (
     <div>
-      <PageBanner image={IMAGES.garden} title="联系我们" subtitle="我们随时为您提供帮助" breadcrumbs={[{ label: '首页', path: '/' }, { label: '联系我们' }]} />
-      <section className="py-16 px-8">
-        <div className="max-w-[1100px] mx-auto grid grid-cols-1 lg:grid-cols-2 gap-12">
+      <PageBanner
+        image={IMAGES.garden}
+        title="联系我们"
+        subtitle="当前为前端演示版联系页，表单提交后进入演示成功反馈页面。"
+        breadcrumbs={[{ label: '首页', path: '/' }, { label: '联系我们' }]}
+      />
+      <section className="px-8 py-16">
+        <div className="mx-auto grid max-w-[1100px] grid-cols-1 gap-12 lg:grid-cols-2">
           <div>
-            <h2 className="text-2xl font-bold mb-6" style={{ fontFamily: '"Noto Serif SC", serif' }}>联系方式</h2>
+            <h2 className="mb-6 text-2xl font-bold text-[#24343B]">联系信息</h2>
             <div className="space-y-6">
               {[
-                { icon: <MapPin className="w-5 h-5" />, title: '地址', content: '安徽省宣城市泾县桃花潭镇' },
-                { icon: <Phone className="w-5 h-5" />, title: '电话', content: '0563-5880088' },
-                { icon: <Mail className="w-5 h-5" />, title: '邮箱', content: 'info@taohuatan.com' },
-                { icon: <Clock className="w-5 h-5" />, title: '工作时间', content: '周一至周日 08:00-18:00' },
-              ].map(c => (
-                <div key={c.title} className="flex items-start gap-4">
-                  <div className="w-10 h-10 rounded-xl bg-[#0077B3]/10 text-[#0077B3] flex items-center justify-center shrink-0">{c.icon}</div>
-                  <div><p className="font-bold text-sm">{c.title}</p><p className="text-gray-500 text-sm">{c.content}</p></div>
+                { icon: <MapPin className="h-5 w-5" />, title: '联系地址', content: '安徽省宣城市泾县桃花潭镇' },
+                { icon: <Phone className="h-5 w-5" />, title: '服务热线', content: '0563-5880088' },
+                { icon: <Mail className="h-5 w-5" />, title: '联系邮箱', content: 'service@taohuatan.cn' },
+                { icon: <Clock className="h-5 w-5" />, title: '服务时间', content: '周一至周日 08:00 - 18:00' },
+              ].map((item) => (
+                <div key={item.title} className="flex items-start gap-4">
+                  <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-[#E8F1F2] text-[#486B72]">
+                    {item.icon}
+                  </div>
+                  <div>
+                    <p className="text-sm font-bold text-[#24343B]">{item.title}</p>
+                    <p className="text-sm text-[#5D6C72]">{item.content}</p>
+                  </div>
                 </div>
               ))}
             </div>
           </div>
-          <div className="bg-white rounded-2xl p-8 border border-gray-100 shadow-sm">
-            <h3 className="font-bold mb-6" style={{ fontFamily: '"Noto Serif SC", serif' }}>在线留言</h3>
+
+          <div className="rounded-[28px] border border-gray-100 bg-white p-8 shadow-sm">
+            <h3 className="mb-6 text-xl font-bold text-[#24343B]">在线留言</h3>
             <div className="space-y-4">
               <div className="grid grid-cols-2 gap-4">
-                <input className="bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-[#FFB114]/30" placeholder="姓名" />
-                <input className="bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-[#FFB114]/30" placeholder="电话" />
+                <input className="rounded-xl border border-gray-200 bg-gray-50 px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-[#C9932C]/25" placeholder="姓名" />
+                <input className="rounded-xl border border-gray-200 bg-gray-50 px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-[#C9932C]/25" placeholder="电话" />
               </div>
-              <input className="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-[#FFB114]/30" placeholder="邮箱" />
-              <select className="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-[#FFB114]/30">
-                <option>咨询类型</option><option>门票咨询</option><option>住宿咨询</option><option>投诉建议</option><option>其他</option>
+              <input className="w-full rounded-xl border border-gray-200 bg-gray-50 px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-[#C9932C]/25" placeholder="邮箱" />
+              <select className="w-full rounded-xl border border-gray-200 bg-gray-50 px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-[#C9932C]/25">
+                <option>咨询类型</option>
+                <option>景区咨询</option>
+                <option>预约咨询</option>
+                <option>投诉建议</option>
+                <option>其他事项</option>
               </select>
-              <textarea className="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-[#FFB114]/30 resize-none" rows={5} placeholder="请输入您的留言..." />
-              <Link to="/support/contact-success" className="block w-full bg-[#FFB114] hover:bg-[#e9a010] text-white text-center py-3 rounded-xl font-semibold transition-colors">提交留言</Link>
+              <textarea className="w-full resize-none rounded-xl border border-gray-200 bg-gray-50 px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-[#C9932C]/25" rows={5} placeholder="请输入留言内容" />
+              <Link to="/support/contact-success" className="block rounded-xl bg-[#C9932C] py-3 text-center font-semibold text-white hover:bg-[#b58323]">
+                提交留言
+              </Link>
             </div>
           </div>
         </div>
@@ -79,43 +150,52 @@ export function ContactPage() {
   );
 }
 
-// Contact Success
 export function ContactSuccess() {
   return (
-    <section className="py-24 px-8">
-      <div className="max-w-[500px] mx-auto text-center bg-white rounded-3xl p-12 shadow-sm border border-gray-100">
-        <div className="w-20 h-20 rounded-full bg-green-100 flex items-center justify-center mx-auto mb-6"><CheckCircle className="w-10 h-10 text-green-500" /></div>
-        <h2 className="text-2xl font-bold mb-2" style={{ fontFamily: '"Noto Serif SC", serif' }}>提交成功！</h2>
-        <p className="text-gray-500 mb-8">我们已收到您的留言，将在1-2个工作日内回复。</p>
-        <Link to="/" className="bg-[#FFB114] hover:bg-[#e9a010] text-white px-8 py-3 rounded-full font-semibold transition-colors">返回首页</Link>
+    <section className="px-8 py-24">
+      <div className="mx-auto max-w-[500px] rounded-[32px] border border-gray-100 bg-white p-12 text-center shadow-sm">
+        <div className="mx-auto mb-6 flex h-20 w-20 items-center justify-center rounded-full bg-green-100">
+          <CheckCircle className="h-10 w-10 text-green-500" />
+        </div>
+        <h2 className="text-2xl font-bold text-[#24343B]">提交成功</h2>
+        <p className="mt-3 text-sm leading-7 text-[#617178]">
+          我们已经收到你的留言。当前为前端演示版本，页面会展示提交成功状态，但不会接入真实工单系统。
+        </p>
+        <Link to="/" className="mt-8 inline-block rounded-full bg-[#C9932C] px-8 py-3 font-semibold text-white hover:bg-[#b58323]">
+          返回首页
+        </Link>
       </div>
     </section>
   );
 }
 
-// Service Center
 export function ServiceCenter() {
   return (
     <div>
-      <PageBanner image={IMAGES.garden} title="游客服务中心" subtitle="为您提供全方位的旅游服务" breadcrumbs={[{ label: '首页', path: '/' }, { label: '游客服务中心' }]} />
-      <section className="py-16 px-8">
-        <div className="max-w-[1280px] mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      <PageBanner
+        image={IMAGES.garden}
+        title="服务中心"
+        subtitle="展示景区票务、交通、讲解、停车、售后与出行帮助等支撑能力。"
+        breadcrumbs={[{ label: '首页', path: '/' }, { label: '服务中心' }]}
+      />
+      <section className="px-8 py-16">
+        <div className="mx-auto grid max-w-[1280px] grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
           {[
-            { icon: '🎫', title: '票务服务', desc: '门票购买、退改签、团队票务' },
-            { icon: '🗺️', title: '导览服务', desc: '景区地图、导游预约、讲解器租赁' },
-            { icon: '🧳', title: '行李寄存', desc: '免费行李寄存服务' },
-            { icon: '🏥', title: '医疗救助', desc: '紧急医疗服务、急救药品' },
-            { icon: '♿', title: '无障碍服务', desc: '轮椅租借、无障碍通道' },
-            { icon: '📸', title: '摄影服务', desc: '专业摄影师跟拍预约' },
-            { icon: '🍽️', title: '餐饮推荐', desc: '景区周边餐厅推荐' },
-            { icon: '🛒', title: '特产购物', desc: '正宗本地特产选购' },
-            { icon: '📞', title: '投诉建议', desc: '服务质量反馈通道' },
-          ].map(s => (
-            <div key={s.title} className="bg-white rounded-xl p-6 border border-gray-100 hover:shadow-md transition-shadow">
-              <span className="text-3xl">{s.icon}</span>
-              <h4 className="font-bold mt-3 mb-1" style={{ fontFamily: '"Noto Serif SC", serif' }}>{s.title}</h4>
-              <p className="text-gray-500 text-sm">{s.desc}</p>
-            </div>
+            { title: '常见问题', desc: '快速查看答辩中常被问到的预约、退改和使用规则。', link: '/support/faq' },
+            { title: '交通指南', desc: '从高铁、自驾和大巴三个方向说明到达方式。', link: '/support/transport' },
+            { title: '停车说明', desc: '查看景区周边停车与接驳安排。', link: '/support/parking' },
+            { title: '景区公告', desc: '展示平台的通知触达与信息发布能力。', link: '/support/announcements' },
+            { title: '隐私政策', desc: '说明当前项目为前端 mock 演示版。', link: '/support/privacy' },
+            { title: '服务条款', desc: '说明平台定位、演示边界与后续扩展方向。', link: '/support/terms' },
+          ].map((item) => (
+            <Link
+              key={item.title}
+              to={item.link}
+              className="rounded-[26px] border border-gray-100 bg-white p-6 shadow-sm hover:shadow-lg"
+            >
+              <h3 className="text-lg font-bold text-[#24343B]">{item.title}</h3>
+              <p className="mt-3 text-sm leading-7 text-[#52636A]">{item.desc}</p>
+            </Link>
           ))}
         </div>
       </section>
@@ -123,36 +203,34 @@ export function ServiceCenter() {
   );
 }
 
-// FAQ
 export function FAQPage() {
-  const [openIdx, setOpenIdx] = useState<number | null>(0);
-  const faqs = [
-    { q: '桃花潭景区的开放时间是什么？', a: '桃花潭景区每日08:00-17:30开放，夏季延长至18:00。售票处关闭时间为闭园前1小时。', cat: '基本信息' },
-    { q: '门票价格是多少？有优惠政策吗？', a: '成人票65元/人，学生票35元/人（凭有效学生证）。1.2米以下儿童和65岁以上老人免票。推荐购买双景联票（桃花潭+查济）108元更划算。', cat: '门票' },
-    { q: '景区有停车场吗？收费标准如何？', a: '景区设有大型停车场，小型车15元/天，大型车30元/天。节假日建议提前到达确保车位。', cat: '交通' },
-    { q: '如何到达桃花潭景区？', a: '可乘坐高铁至泾县站后转乘大巴或出租车（约40分钟），也可自驾经G50沪渝高速泾县出口下。', cat: '交通' },
-    { q: '景区内有餐厅吗？', a: '景区内及周边有多家餐厅，提供正宗徽菜和地方特色小吃。推荐品尝臭鳜鱼、毛豆腐等特色菜品。', cat: '餐饮' },
-    { q: '可以退票吗？退票规则是什么？', a: '使用前3天可全额退款，1-3天退款80%，使用前1天内退款50%，使用当天不可退款。', cat: '门票' },
-    { q: '景区有无障碍设施吗？', a: '景区主要游览路线设有无障碍通道，游客服务中心提供免费轮椅租借服务。', cat: '服务' },
+  const faqList = [
+    {
+      title: '当前平台可以真实下单吗？',
+      content: '当前版本为前端演示版，登录、支付、订单、发票与社区发布均为 mock 演示，不接真实后端。',
+    },
+    {
+      title: '刷新子页面会不会 404？',
+      content: '项目已经补充前端路由回退配置，Vercel 部署后刷新景点、路线、社区和用户中心子页面都能回退到 index.html。',
+    },
+    {
+      title: '预约流程是否完整？',
+      content: '可以从门票预约进入，依次演示订单确认、在线支付、预约成功、我的订单、发票申请和退改签。',
+    },
   ];
+
   return (
     <div>
-      <PageBanner image={IMAGES.tea} title="常见问题" subtitle="快速找到你需要的答案" breadcrumbs={[{ label: '首页', path: '/' }, { label: '常见问题' }]} />
-      <section className="py-16 px-8">
-        <div className="max-w-[800px] mx-auto space-y-3">
-          {faqs.map((faq, i) => (
-            <div key={i} className="bg-white rounded-xl border border-gray-100 overflow-hidden">
-              <button onClick={() => setOpenIdx(openIdx === i ? null : i)} className="w-full flex items-center justify-between px-6 py-5 text-left hover:bg-gray-50 transition-colors">
-                <div className="flex items-center gap-3">
-                  <span className="text-xs bg-[#0077B3]/10 text-[#0077B3] px-2 py-0.5 rounded-full">{faq.cat}</span>
-                  <span className="font-medium text-sm">{faq.q}</span>
-                </div>
-                {openIdx === i ? <ChevronUp className="w-4 h-4 text-gray-400 shrink-0" /> : <ChevronDown className="w-4 h-4 text-gray-400 shrink-0" />}
-              </button>
-              {openIdx === i && (
-                <div className="px-6 pb-5"><p className="text-gray-600 text-sm leading-relaxed pl-[68px]">{faq.a}</p></div>
-              )}
-            </div>
+      <PageBanner
+        image={IMAGES.calligraphy}
+        title="常见问题"
+        subtitle="把老师最容易问到的问题预先整理到支撑页面里。"
+        breadcrumbs={[{ label: '首页', path: '/' }, { label: '常见问题' }]}
+      />
+      <section className="px-8 py-12">
+        <div className="mx-auto max-w-[860px] space-y-4">
+          {faqList.map((item) => (
+            <FaqItem key={item.title} title={item.title} content={item.content} />
           ))}
         </div>
       </section>
@@ -160,22 +238,28 @@ export function FAQPage() {
   );
 }
 
-// Transport Guide
 export function TransportPage() {
   return (
     <div>
-      <PageBanner image={IMAGES.road} title="交通指南" subtitle="多种方式轻松抵达桃花潭" breadcrumbs={[{ label: '首页', path: '/' }, { label: '交通指南' }]} />
-      <section className="py-16 px-8">
-        <div className="max-w-[1100px] mx-auto grid grid-cols-1 md:grid-cols-3 gap-8">
+      <PageBanner
+        image={IMAGES.lakeMountain}
+        title="交通指南"
+        subtitle="适合答辩时展示平台对游客出行前决策的支撑能力。"
+        breadcrumbs={[{ label: '首页', path: '/' }, { label: '交通指南' }]}
+      />
+      <section className="px-8 py-12">
+        <div className="mx-auto grid max-w-[1100px] grid-cols-1 gap-6 md:grid-cols-3">
           {[
-            { icon: <Train className="w-8 h-8" />, title: '高铁', color: 'from-[#0077B3] to-[#0EA5E9]', items: ['合肥南站 → 泾县站（约1.5小时）', '南京南站 → 泾县站（约2小时）', '上海虹桥站 → 泾县站（约3.5小时）', '泾县站 → 景区（大巴/出租约40分钟）'] },
-            { icon: <Bus className="w-8 h-8" />, title: '大巴', color: 'from-[#39C668] to-[#34D399]', items: ['合肥汽车站 → 泾县（每日多班）', '南京汽车站 → 泾县', '宣城汽车站 → 泾县（约1小时）', '泾县 → 桃花潭镇（班车）'] },
-            { icon: <Car className="w-8 h-8" />, title: '自驾', color: 'from-[#FFB114] to-[#F59E0B]', items: ['G50沪渝高速 → 泾县出口', '合肥方向：约3小时', '南京方向：约3.5小时', '上海方向：约5小时', '景区提供停车场'] },
-          ].map(t => (
-            <div key={t.title} className="bg-white rounded-2xl p-8 border border-gray-100 shadow-sm">
-              <div className={`w-16 h-16 rounded-2xl bg-gradient-to-br ${t.color} text-white flex items-center justify-center mb-4`}>{t.icon}</div>
-              <h3 className="text-xl font-bold mb-4" style={{ fontFamily: '"Noto Serif SC", serif' }}>{t.title}</h3>
-              <ul className="space-y-3">{t.items.map(item => <li key={item} className="text-sm text-gray-600 flex items-start gap-2"><span className="text-[#FFB114] mt-1">•</span>{item}</li>)}</ul>
+            { icon: <Train className="h-6 w-6" />, title: '高铁出行', desc: '可先到泾县或黄山周边站点，再转乘景区接驳或网约车。' },
+            { icon: <Car className="h-6 w-6" />, title: '自驾前往', desc: '适合串联桃花潭、查济、太平湖，多景点转场更灵活。' },
+            { icon: <Bus className="h-6 w-6" />, title: '大巴接驳', desc: '节假日可配合景区班车与团队接驳方案做演示说明。' },
+          ].map((item) => (
+            <div key={item.title} className="rounded-[26px] border border-gray-100 bg-white p-6 shadow-sm">
+              <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-2xl bg-[#E8F1F2] text-[#486B72]">
+                {item.icon}
+              </div>
+              <h3 className="text-lg font-bold text-[#24343B]">{item.title}</h3>
+              <p className="mt-3 text-sm leading-7 text-[#52636A]">{item.desc}</p>
             </div>
           ))}
         </div>
@@ -184,29 +268,22 @@ export function TransportPage() {
   );
 }
 
-// Parking
 export function ParkingPage() {
   return (
     <div>
-      <PageBanner image={IMAGES.road} title="停车信息" subtitle="景区停车场分布及收费标准" breadcrumbs={[{ label: '首页', path: '/' }, { label: '停车信息' }]} />
-      <section className="py-16 px-8">
-        <div className="max-w-[900px] mx-auto">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            {[
-              { name: '桃花潭主停车场', spaces: 200, price: '小型车15元/天', distance: '距景区入口200m' },
-              { name: '查济停车场', spaces: 150, price: '小型车10元/天', distance: '距古村入口100m' },
-              { name: '太平湖停车场', spaces: 300, price: '小型车20元/天', distance: '距码头50m' },
-              { name: '游客中心停车场', spaces: 100, price: '前30分钟免费', distance: '游客中心旁' },
-            ].map(p => (
-              <div key={p.name} className="bg-white rounded-xl p-6 border border-gray-100">
-                <h4 className="font-bold mb-3" style={{ fontFamily: '"Noto Serif SC", serif' }}>{p.name}</h4>
-                <div className="space-y-2 text-sm text-gray-500">
-                  <div className="flex justify-between"><span>车位数</span><span className="font-medium text-gray-700">{p.spaces}个</span></div>
-                  <div className="flex justify-between"><span>收费标准</span><span className="font-medium text-gray-700">{p.price}</span></div>
-                  <div className="flex justify-between"><span>距离</span><span className="font-medium text-gray-700">{p.distance}</span></div>
-                </div>
-              </div>
-            ))}
+      <PageBanner
+        image={IMAGES.bridgeVillage}
+        title="停车说明"
+        subtitle="展示停车、接驳与高峰期分流提示，补齐游客服务信息。"
+        breadcrumbs={[{ label: '首页', path: '/' }, { label: '停车说明' }]}
+      />
+      <section className="px-8 py-12">
+        <div className="mx-auto max-w-[920px] rounded-[28px] border border-gray-100 bg-white p-8 shadow-sm">
+          <div className="space-y-4 text-sm leading-8 text-[#52636A]">
+            <p>1. 桃花潭主入口设有游客停车区，适合自驾游客集中停放。</p>
+            <p>2. 查济古村周边建议使用景区外围停车点，再步行或接驳进入古村。</p>
+            <p>3. 假期高峰时段建议提前完成在线预约，并尽量在上午错峰到达。</p>
+            <p>4. 当前为前端演示版，停车余位与导航路径均为说明性内容。</p>
           </div>
         </div>
       </section>
@@ -214,33 +291,39 @@ export function ParkingPage() {
   );
 }
 
-// Announcements
 export function AnnouncementsPage() {
   return (
     <div>
-      <PageBanner image={IMAGES.garden} title="景区公告" subtitle="了解最新景区动态" breadcrumbs={[{ label: '首页', path: '/' }, { label: '景区公告' }]} />
-      <section className="py-16 px-8">
-        <div className="max-w-[800px] mx-auto space-y-4">
-          {[
-            { title: '关于2026年春季开放时间调整的通知', date: '2026-04-10', tag: '通知', important: true },
-            { title: '桃花潭景区五一假期接待安排', date: '2026-04-08', tag: '公告', important: true },
-            { title: '查济古村修缮工程进展公告', date: '2026-04-05', tag: '公告', important: false },
-            { title: '太平湖游船线路优化通知', date: '2026-04-01', tag: '通知', important: false },
-            { title: '景区电子门票系统升级公告', date: '2026-03-28', tag: '系统', important: false },
-          ].map((a, i) => (
-            <Link key={i} to={`/support/announcement/${i + 1}`} className="block bg-white rounded-xl p-6 border border-gray-100 hover:shadow-md transition-shadow group">
-              <div className="flex items-start justify-between">
-                <div className="flex items-start gap-3">
-                  {a.important && <span className="text-red-500 text-xs mt-1">🔴</span>}
-                  <div>
-                    <h4 className="font-bold text-sm group-hover:text-[#0077B3] transition-colors">{a.title}</h4>
-                    <div className="flex items-center gap-2 mt-1">
-                      <span className="text-xs bg-[#0077B3]/10 text-[#0077B3] px-2 py-0.5 rounded-full">{a.tag}</span>
-                      <span className="text-gray-400 text-xs">{a.date}</span>
-                    </div>
+      <PageBanner
+        image={IMAGES.garden}
+        title="景区公告"
+        subtitle="通过公告列表和详情页，展示平台的信息发布与通知触达能力。"
+        breadcrumbs={[{ label: '首页', path: '/' }, { label: '景区公告' }]}
+      />
+      <section className="px-8 py-12">
+        <div className="mx-auto max-w-[1080px] space-y-4">
+          {announcementData.map((announcement) => (
+            <Link
+              key={announcement.id}
+              to={`/support/announcement/${announcement.id}`}
+              className="block rounded-[22px] border border-gray-100 bg-white p-6 shadow-sm hover:shadow-md"
+            >
+              <div className="flex items-start justify-between gap-4">
+                <div>
+                  <div className="mb-2 flex items-center gap-2">
+                    <span className="rounded-full bg-[#E8F1F2] px-2 py-1 text-xs text-[#486B72]">
+                      {announcement.category}
+                    </span>
+                    {announcement.important ? (
+                      <span className="rounded-full bg-red-50 px-2 py-1 text-xs text-red-500">
+                        重要
+                      </span>
+                    ) : null}
                   </div>
+                  <h4 className="font-bold text-[#24343B]">{announcement.title}</h4>
+                  <p className="mt-2 text-sm leading-7 text-[#5D6C72]">{announcement.summary}</p>
                 </div>
-                <ChevronDown className="w-4 h-4 text-gray-300 rotate-[-90deg]" />
+                <span className="whitespace-nowrap text-xs text-[#8B989D]">{announcement.date}</span>
               </div>
             </Link>
           ))}
@@ -250,28 +333,59 @@ export function AnnouncementsPage() {
   );
 }
 
-// Announcement Detail
 export function AnnouncementDetail() {
+  const { id } = useParams();
+  const announcement = id ? announcementMap[id] : null;
+
+  if (!announcement) {
+    return (
+      <ContentNotFound
+        title="公告不存在"
+        description="你访问的公告详情未找到，可返回公告列表查看已整理好的系统通知。"
+        backTo="/support/announcements"
+        backLabel="返回公告列表"
+      />
+    );
+  }
+
   return (
     <div>
-      <PageBanner image={IMAGES.garden} title="景区公告详情" breadcrumbs={[{ label: '首页', path: '/' }, { label: '景区公告', path: '/support/announcements' }, { label: '公告详情' }]} />
-      <section className="py-12 px-8">
-        <div className="max-w-[800px] mx-auto bg-white rounded-2xl p-8 border border-gray-100">
-          <div className="flex items-center gap-2 mb-4">
-            <span className="text-xs bg-[#0077B3]/10 text-[#0077B3] px-2 py-0.5 rounded-full">通知</span>
-            <span className="text-gray-400 text-xs">2026-04-10</span>
+      <PageBanner
+        image={IMAGES.garden}
+        title={announcement.title}
+        subtitle={announcement.summary}
+        breadcrumbs={[
+          { label: '首页', path: '/' },
+          { label: '景区公告', path: '/support/announcements' },
+          { label: '公告详情' },
+        ]}
+      />
+      <section className="px-8 py-12">
+        <div className="mx-auto max-w-[820px] rounded-[28px] border border-gray-100 bg-white p-8 shadow-sm">
+          <div className="mb-4 flex items-center gap-2">
+            <span className="rounded-full bg-[#E8F1F2] px-2 py-1 text-xs text-[#486B72]">
+              {announcement.category}
+            </span>
+            <span className="text-xs text-[#8B989D]">{announcement.date}</span>
           </div>
-          <h1 className="text-2xl font-bold mb-6" style={{ fontFamily: '"Noto Serif SC", serif' }}>关于2026年春季开放时间调整的通知</h1>
-          <div className="prose max-w-none text-gray-600 text-sm leading-relaxed space-y-4">
-            <p>尊敬的游客朋友们：</p>
-            <p>随着春季到来，为更好地服务广大游客，桃花潭景区自2026年4月15日起调整开放时间如下：</p>
-            <ul className="list-disc pl-5 space-y-2">
-              <li>景区开放时间：07:30 - 18:00（原08:00 - 17:30）</li>
-              <li>售票时间：07:30 - 17:00</li>
-              <li>游船运营时间：08:00 - 17:30</li>
-            </ul>
-            <p>请各位游客合理安排出行时间。如有疑问，请拨打服务热线：0563-5880088。</p>
-            <p className="text-right">桃花潭景区管理委员会<br />2026年4月10日</p>
+          <h1 className="mb-6 text-2xl font-bold text-[#24343B]">{announcement.title}</h1>
+          <div className="space-y-4 text-sm leading-8 text-[#52636A]">
+            <p>{announcement.introduction}</p>
+            {announcement.bullets ? (
+              <ul className="list-disc space-y-2 pl-5">
+                {announcement.bullets.map((item) => (
+                  <li key={item}>{item}</li>
+                ))}
+              </ul>
+            ) : null}
+            {announcement.paragraphs.map((paragraph) => (
+              <p key={paragraph}>{paragraph}</p>
+            ))}
+            <p className="pt-4 text-right">
+              {announcement.issuer}
+              <br />
+              {announcement.date}
+            </p>
           </div>
         </div>
       </section>
@@ -279,24 +393,29 @@ export function AnnouncementDetail() {
   );
 }
 
-// Privacy Policy
 export function PrivacyPolicyPage() {
+  const sections = [
+    { title: '一、信息收集', content: '当前演示版仅在浏览器本地保存部分预约草稿、订单和登录状态，不会向真实后端上传个人信息。' },
+    { title: '二、信息用途', content: '这些演示数据仅用于前端页面展示、订单闭环演示与用户中心体验。' },
+    { title: '三、信息共享', content: '当前项目不接真实第三方服务，不存在对外共享真实用户数据的流程。' },
+    { title: '四、演示说明', content: '登录、支付、订单、发票、社区发布均为 mock 演示，不构成真实生产承诺。' },
+    { title: '五、联系反馈', content: '如需课程演示说明或项目交付说明，可通过联系页面查看演示联系方式。' },
+  ];
+
   return (
     <div>
-      <PageBanner image={IMAGES.calligraphy} title="隐私政策" breadcrumbs={[{ label: '首页', path: '/' }, { label: '隐私政策' }]} />
-      <section className="py-12 px-8">
-        <div className="max-w-[800px] mx-auto bg-white rounded-2xl p-8 border border-gray-100">
-          <p className="text-gray-400 text-sm mb-6">最后更新：2026年4月1日</p>
-          {[
-            { title: '一、信息收集', content: '我们在您使用平台服务时，可能会收集您主动提供的个人信息，包括但不限于姓名、手机号、身份证号等，用于完成预约和订单服务。' },
-            { title: '二、信息使用', content: '我们仅在提供服务所必需的范围内使用您的个人信息，包括完成预约订单、发送通知消息、改善服务质量等。' },
-            { title: '三、信息保护', content: '我们采用行业标准的安全措施保护您的个人信息，防止未经授权的访问、使用或披露。' },
-            { title: '四、信息共享', content: '未经您的同意，我们不会向任何第三方共享您的个人信息，法律法规要求除外。' },
-            { title: '五、联系方式', content: '如您对本隐私政策有任何疑问，请联系我们：info@taohuatan.com' },
-          ].map(s => (
-            <div key={s.title} className="mb-6">
-              <h3 className="font-bold mb-2" style={{ fontFamily: '"Noto Serif SC", serif' }}>{s.title}</h3>
-              <p className="text-gray-600 text-sm leading-relaxed">{s.content}</p>
+      <PageBanner
+        image={IMAGES.calligraphy}
+        title="隐私政策"
+        breadcrumbs={[{ label: '首页', path: '/' }, { label: '隐私政策' }]}
+      />
+      <section className="px-8 py-12">
+        <div className="mx-auto max-w-[820px] rounded-[28px] border border-gray-100 bg-white p-8 shadow-sm">
+          <p className="mb-6 text-sm text-[#8B989D]">最后更新：2026 年 7 月 3 日</p>
+          {sections.map((section) => (
+            <div key={section.title} className="mb-6">
+              <h3 className="mb-2 font-bold text-[#24343B]">{section.title}</h3>
+              <p className="text-sm leading-8 text-[#52636A]">{section.content}</p>
             </div>
           ))}
         </div>
@@ -305,24 +424,29 @@ export function PrivacyPolicyPage() {
   );
 }
 
-// Terms of Service
 export function TermsPage() {
+  const sections = [
+    { title: '一、平台说明', content: '本项目为“桃花潭景区数字化展示与预约平台”前端演示版，用于课程答辩、项目展示与部署演示。' },
+    { title: '二、演示边界', content: '登录、支付、订单、社区发布、搜索等能力均为 mock 演示，不代表真实商用系统已经接入完整后端。' },
+    { title: '三、内容使用', content: '站内文案、页面与结构主要用于展示交互、内容组织与前端能力，不构成真实票务或法律承诺。' },
+    { title: '四、预约说明', content: '当前预约流程仅用于演示用户从选品、下单、支付到成功和订单页的前端闭环。' },
+    { title: '五、后续扩展', content: '如需真实上线，仍需补充用户鉴权、支付接口、订单系统、内容审核与 CMS 等后端能力。' },
+  ];
+
   return (
     <div>
-      <PageBanner image={IMAGES.calligraphy} title="服务条款" breadcrumbs={[{ label: '首页', path: '/' }, { label: '服务条款' }]} />
-      <section className="py-12 px-8">
-        <div className="max-w-[800px] mx-auto bg-white rounded-2xl p-8 border border-gray-100">
-          <p className="text-gray-400 text-sm mb-6">最后更新：2026年4月1日</p>
-          {[
-            { title: '一、服务说明', content: '本平台为桃花潭景区官方数字化展示与预约平台，提供景区信息展示、路线推荐、在线预约、社区互动等服务。' },
-            { title: '二、用户责任', content: '用户应当提供真实准确的个人信息，不得利用本平台从事任何违法活动，不得发布虚假信息。' },
-            { title: '三、预约规则', content: '通过本平台完成的预约订单受相关退改签政策约束，具体规则以下单时页面显示为准。' },
-            { title: '四、知识产权', content: '本平台的所有内容（包括文字、图片、设计等）均受知识产权法保护，未经授权不得使用。' },
-            { title: '五、免责声明', content: '因不可抗力导致的服务中断或延迟，本平台不承担责任。因天气原因导致景区临时关闭，已购门票可按退改签政策处理。' },
-          ].map(s => (
-            <div key={s.title} className="mb-6">
-              <h3 className="font-bold mb-2" style={{ fontFamily: '"Noto Serif SC", serif' }}>{s.title}</h3>
-              <p className="text-gray-600 text-sm leading-relaxed">{s.content}</p>
+      <PageBanner
+        image={IMAGES.calligraphy}
+        title="服务条款"
+        breadcrumbs={[{ label: '首页', path: '/' }, { label: '服务条款' }]}
+      />
+      <section className="px-8 py-12">
+        <div className="mx-auto max-w-[820px] rounded-[28px] border border-gray-100 bg-white p-8 shadow-sm">
+          <p className="mb-6 text-sm text-[#8B989D]">最后更新：2026 年 7 月 3 日</p>
+          {sections.map((section) => (
+            <div key={section.title} className="mb-6">
+              <h3 className="mb-2 font-bold text-[#24343B]">{section.title}</h3>
+              <p className="text-sm leading-8 text-[#52636A]">{section.content}</p>
             </div>
           ))}
         </div>
@@ -331,18 +455,25 @@ export function TermsPage() {
   );
 }
 
-// 404 Page
 export function NotFoundPage() {
   return (
-    <section className="min-h-[70vh] flex items-center justify-center px-8">
+    <section className="flex min-h-[70vh] items-center justify-center px-8">
       <div className="text-center">
-        <div className="text-8xl mb-6">🏞️</div>
-        <h1 className="text-6xl font-bold text-gray-200 mb-4">404</h1>
-        <h2 className="text-2xl font-bold mb-2" style={{ fontFamily: '"Noto Serif SC", serif' }}>页面未找到</h2>
-        <p className="text-gray-500 mb-8">抱歉，您要找的页面可能已经移动或不存在。<br />不如回到首页，继续探索桃花潭之美？</p>
-        <div className="flex gap-4 justify-center">
-          <Link to="/" className="bg-[#FFB114] hover:bg-[#e9a010] text-white px-8 py-3 rounded-full font-semibold transition-colors">返回首页</Link>
-          <Link to="/scenic" className="bg-gray-100 hover:bg-gray-200 text-gray-700 px-8 py-3 rounded-full font-medium transition-colors">浏览景点</Link>
+        <div className="mb-6 text-7xl text-[#C9932C]">404</div>
+        <h2 className="text-2xl font-bold text-[#24343B]">页面未找到</h2>
+        <p className="mt-3 text-sm leading-7 text-[#617178]">
+          你访问的路径可能不存在、已调整，或者只是为了演示 404 页面而手动输入的测试地址。
+        </p>
+        <div className="mt-8 flex flex-wrap justify-center gap-4">
+          <Link to="/" className="rounded-full bg-[#C9932C] px-8 py-3 font-semibold text-white hover:bg-[#b58323]">
+            返回首页
+          </Link>
+          <Link
+            to="/scenic"
+            className="rounded-full bg-[#F4EFE6] px-8 py-3 font-medium text-[#41535F] hover:bg-[#e7dece]"
+          >
+            浏览景点
+          </Link>
         </div>
       </div>
     </section>

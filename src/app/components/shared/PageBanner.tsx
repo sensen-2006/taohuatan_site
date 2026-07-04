@@ -8,29 +8,39 @@ interface PageBannerProps {
   breadcrumbs?: { label: string; path?: string }[];
 }
 
-export function PageBanner({ image, title, subtitle, breadcrumbs }: PageBannerProps) {
+export function PageBanner({
+  image,
+  title,
+  subtitle,
+  breadcrumbs,
+}: PageBannerProps) {
   return (
     <section className="relative h-[340px] w-full overflow-hidden">
-      <div className="absolute inset-0 bg-cover bg-center" style={{ backgroundImage: `url(${image})` }} />
-      <div className="absolute inset-0 bg-gradient-to-r from-black/60 via-black/40 to-black/50" />
+      <div
+        className="absolute inset-0 bg-cover bg-center scale-105"
+        style={{ backgroundImage: `url(${image})` }}
+      />
+      <div className="absolute inset-0 bg-[linear-gradient(135deg,rgba(22,33,38,0.82),rgba(54,82,88,0.56),rgba(201,147,44,0.28))]" />
       <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent" />
-      <div className="relative h-full flex flex-col justify-end px-8 pb-12 max-w-[1280px] mx-auto">
-        {breadcrumbs && (
-          <nav className="flex items-center gap-1 text-white/60 text-sm mb-4">
-            {breadcrumbs.map((item, i) => (
-              <span key={i} className="flex items-center gap-1">
-                {i > 0 && <ChevronRight className="w-3.5 h-3.5" />}
+      <div className="relative h-full max-w-[1280px] mx-auto px-8 pb-12 flex flex-col justify-end">
+        {breadcrumbs ? (
+          <nav className="mb-4 flex flex-wrap items-center gap-1 text-sm text-white/70">
+            {breadcrumbs.map((item, index) => (
+              <span key={`${item.label}-${index}`} className="flex items-center gap-1">
+                {index > 0 ? <ChevronRight className="h-3.5 w-3.5" /> : null}
                 {item.path ? (
-                  <Link to={item.path} className="hover:text-white transition-colors">{item.label}</Link>
+                  <Link to={item.path} className="transition-colors hover:text-white">
+                    {item.label}
+                  </Link>
                 ) : (
-                  <span className="text-white/90">{item.label}</span>
+                  <span className="text-white/95">{item.label}</span>
                 )}
               </span>
             ))}
           </nav>
-        )}
-        <h1 className="text-white text-4xl font-bold mb-2" style={{ fontFamily: '"Noto Serif SC", serif' }}>{title}</h1>
-        {subtitle && <p className="text-white/70 text-lg">{subtitle}</p>}
+        ) : null}
+        <h1 className="text-4xl font-bold text-white">{title}</h1>
+        {subtitle ? <p className="mt-3 max-w-3xl text-lg text-white/80">{subtitle}</p> : null}
       </div>
     </section>
   );

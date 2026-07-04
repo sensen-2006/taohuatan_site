@@ -1,17 +1,19 @@
-// Centralized image URLs
+import heroImage from '../../../imports/9.png';
+
+// 关键视觉资源统一使用本地兜底图，避免弱网或外链失效时影响答辩展示。
 export const IMAGES = {
-  lakeMountain: 'https://images.unsplash.com/photo-1631256288704-f30b17d95df6?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxDaGluZXNlJTIwbGFrZSUyMG1vdW50YWluJTIwbWlzdHklMjBsYW5kc2NhcGV8ZW58MXx8fHwxNzc2MDAzMTU1fDA&ixlib=rb-4.1.0&q=80&w=1080',
-  huizhouArch: 'https://images.unsplash.com/photo-1769571049002-14e61c878f6c?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxDaGluZXNlJTIwdHJhZGl0aW9uYWwlMjBhcmNoaXRlY3R1cmUlMjBodWl6aG91fGVufDF8fHx8MTc3NjAwMzE1Nnww&ixlib=rb-4.1.0&q=80&w=1080',
-  lakeBoat: 'https://images.unsplash.com/photo-1759635925346-fb993ed685ea?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxwZWFjZWZ1bCUyMGxha2UlMjBib2F0JTIwQ2hpbmElMjBzY2VuZXJ5fGVufDF8fHx8MTc3NjAwMzE1Nnww&ixlib=rb-4.1.0&q=80&w=1080',
-  bridgeVillage: 'https://images.unsplash.com/photo-1775278526814-74e9a7df6359?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxDaGluZXNlJTIwYW5jaWVudCUyMHN0b25lJTIwYnJpZGdlJTIwd2F0ZXIlMjB2aWxsYWdlfGVufDF8fHx8MTc3NjAwMzE1N3ww&ixlib=rb-4.1.0&q=80&w=1080',
-  hiking: 'https://images.unsplash.com/photo-1774979131240-282bdbd11627?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxtb3VudGFpbiUyMGhpa2luZyUyMHRyYWlsJTIwQ2hpbmElMjBncmVlbnxlbnwxfHx8fDE3NzYwMDMxNTd8MA&ixlib=rb-4.1.0&q=80&w=1080',
-  hotel: 'https://images.unsplash.com/photo-1770033138638-fec483a30a13?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxDaGluZXNlJTIwdHJhZGl0aW9uYWwlMjBob3RlbCUyMGJvdXRpcXVlJTIwaW50ZXJpb3J8ZW58MXx8fHwxNzc2MDAzMTU4fDA&ixlib=rb-4.1.0&q=80&w=1080',
-  calligraphy: 'https://images.unsplash.com/photo-1713118775380-6c7494378e88?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxDaGluZXNlJTIwY2FsbGlncmFwaHklMjBpbmslMjBwYWludGluZyUyMGxhbmRzY2FwZXxlbnwxfHx8fDE3NzYwMDMxNTh8MA&ixlib=rb-4.1.0&q=80&w=1080',
-  family: 'https://images.unsplash.com/photo-1770251302962-568f8e29e875?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxmYW1pbHklMjB0cmF2ZWwlMjB2YWNhdGlvbiUyMHNjZW5pYyUyMENoaW5hfGVufDF8fHx8MTc3NjAwMzE1OXww&ixlib=rb-4.1.0&q=80&w=1080',
-  photography: 'https://images.unsplash.com/photo-1760364715703-830c9256e97a?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxwaG90b2dyYXBoeSUyMGNhbWVyYSUyMG5hdHVyZSUyMHNjZW5pYyUyMHZpZXdwb2ludHxlbnwxfHx8fDE3NzYwMDMxNTl8MA&ixlib=rb-4.1.0&q=80&w=1080',
-  tea: 'https://images.unsplash.com/photo-1765188987896-dfc20b28b6ce?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxDaGluZXNlJTIwdGVhJTIwY2VyZW1vbnklMjB0cmFkaXRpb25hbCUyMGN1bHR1cmV8ZW58MXx8fHwxNzc2MDAzMTU5fDA&ixlib=rb-4.1.0&q=80&w=1080',
-  sunsetLake: 'https://images.unsplash.com/photo-1762054051049-2744b28071e9?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxzdW5zZXQlMjBsYWtlJTIwcmVmbGVjdGlvbiUyMG1vdW50YWlucyUyMENoaW5hfGVufDF8fHx8MTc3NjAwMzE2MHww&ixlib=rb-4.1.0&q=80&w=1080',
-  garden: 'https://images.unsplash.com/photo-1705851582744-d9fd39236d2f?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxDaGluZXNlJTIwZ2FyZGVuJTIwcGF2aWxpb24lMjBwb25kfGVufDF8fHx8MTc3NjAwMzE2NHww&ixlib=rb-4.1.0&q=80&w=1080',
-  road: 'https://images.unsplash.com/photo-1767166612293-c91d34c0a855?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxyb2FkJTIwdHJpcCUyMGRyaXZpbmclMjBzY2VuaWMlMjBtb3VudGFpbiUyMENoaW5hfGVufDF8fHx8MTc3NjAwMzE2NHww&ixlib=rb-4.1.0&q=80&w=1080',
-  tourGuide: 'https://images.unsplash.com/photo-1600714480856-dc99b28892eb?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHx0b3VyJTIwZ3VpZGUlMjBncm91cCUyMHRvdXJpc3RzJTIwc2lnaHRzZWVpbmd8ZW58MXx8fHwxNzc2MDAzMTY1fDA&ixlib=rb-4.1.0&q=80&w=1080',
-};
+  lakeMountain: heroImage,
+  huizhouArch: heroImage,
+  lakeBoat: heroImage,
+  bridgeVillage: heroImage,
+  hiking: heroImage,
+  hotel: heroImage,
+  calligraphy: heroImage,
+  family: heroImage,
+  photography: heroImage,
+  tea: heroImage,
+  sunsetLake: heroImage,
+  garden: heroImage,
+  road: heroImage,
+  tourGuide: heroImage,
+} as const;

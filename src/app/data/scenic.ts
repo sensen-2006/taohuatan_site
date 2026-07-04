@@ -1,0 +1,128 @@
+import { IMAGES } from '../components/shared/images';
+import type { ScenicItem } from './types';
+
+export const scenicData: ScenicItem[] = [
+  {
+    id: 'taohuatan',
+    name: '桃花潭',
+    englishName: 'Taohuatan',
+    category: '诗意山水',
+    rating: 4.9,
+    reviews: 2856,
+    priceLabel: '￥65/人',
+    openingHours: '08:00 - 17:30',
+    address: '安徽省宣城市泾县桃花潭镇',
+    shortDescription: '李白诗中“桃花潭水深千尺”的千年送别地，也是皖南诗意山水的代表名片。',
+    longDescription:
+      '桃花潭兼具山水景观、唐诗文化与江南水乡气质，是平台最核心的景点展示对象之一。这里适合承接首页主视觉、景点详情、门票预约和路线串联，也是答辩演示中最容易建立品牌记忆点的场景。',
+    tags: ['5A 景区', '诗词文化', '江南水乡'],
+    highlights: ['踏歌古岸', '文昌阁', '湖上竹筏', '临水老街', '水岸栈道'],
+    tips: ['建议游览 3-4 小时', '清晨与傍晚更适合拍摄', '可与查济组成一日联游', '春秋两季氛围最佳'],
+    history:
+      '桃花潭因李白与汪伦的送别故事而闻名，兼具文化记忆与场景辨识度，是皖南文旅数字化叙事中天然适合作为“主入口”的景点。',
+    gallery: [IMAGES.lakeMountain, IMAGES.garden, IMAGES.sunsetLake, IMAGES.lakeBoat],
+    bannerImage: IMAGES.lakeMountain,
+    cardImage: IMAGES.lakeMountain,
+    bestSeason: '3-5 月、9-11 月',
+    travelDuration: '半日游',
+    activities: [
+      { title: '古岸漫步', description: '沿临水古岸慢行，感受诗意送别与江南水乡的安静节奏。', icon: '岸' },
+      { title: '竹筏观景', description: '在缓慢水面上观看远山与倒影，适合高端文旅视觉展示。', icon: '舟' },
+      { title: '诗词讲解', description: '通过讲解串联李白、汪伦与桃花潭文化故事。', icon: '诗' },
+      { title: '黄昏摄影', description: '日落与薄雾交织时，更能呈现东方高级感。', icon: '景' },
+    ],
+  },
+  {
+    id: 'chaji',
+    name: '查济古村',
+    englishName: 'Chaji Ancient Village',
+    category: '徽派古村',
+    rating: 4.8,
+    reviews: 1923,
+    priceLabel: '￥58/人',
+    openingHours: '全天开放',
+    address: '安徽省宣城市泾县桃花潭镇查济村',
+    shortDescription: '白墙黑瓦、溪桥巷陌交织成村，是徽派建筑与古村肌理的代表场景。',
+    longDescription:
+      '查济古村是平台中最能体现“徽派建筑、古村生活、东方古韵”的页面资源。它既适合景点详情，也适合住宿、摄影、攻略和作者主页等多种场景联动展示。',
+    tags: ['徽派建筑', '古村写生', '文化遗产'],
+    highlights: ['古石桥群', '祠堂建筑', '溪边巷道', '明清民居', '院落空间'],
+    tips: ['建议游览 4-5 小时', '薄雾天气更有层次', '石板路较多，建议穿舒适鞋', '适合与住宿和摄影内容联动'],
+    history:
+      '查济始建较早，兴盛于明清，是皖南古村落保护和徽派建筑展示的重要样本，也是课程答辩中很好讲故事的页面资源。',
+    gallery: [IMAGES.bridgeVillage, IMAGES.huizhouArch, IMAGES.calligraphy, IMAGES.garden],
+    bannerImage: IMAGES.bridgeVillage,
+    cardImage: IMAGES.bridgeVillage,
+    bestSeason: '全年皆宜',
+    travelDuration: '半日游',
+    activities: [
+      { title: '古建巡礼', description: '从祠堂、民居到巷道水系，完整感受徽派聚落秩序。', icon: '宅' },
+      { title: '村落摄影', description: '白墙黑瓦与溪桥石巷很适合做视觉展示和内容创作。', icon: '影' },
+      { title: '慢巷寻味', description: '在老街茶馆和小店里体验更生活化的皖南气质。', icon: '巷' },
+      { title: '晨雾氛围', description: '最适合用来讲“诗意东方感”的空间场景。', icon: '雾' },
+    ],
+  },
+  {
+    id: 'taipinghu',
+    name: '太平湖',
+    englishName: 'Taiping Lake',
+    category: '湖居度假',
+    rating: 4.7,
+    reviews: 1456,
+    priceLabel: '￥80/人',
+    openingHours: '08:00 - 18:00',
+    address: '安徽省黄山市黄山区太平湖风景区',
+    shortDescription: '开阔湖面与群山倒影构成宁静度假场景，是平台展示高品质休闲旅游的重要空间。',
+    longDescription:
+      '太平湖承担平台中的“湖景度假、自然休闲、摄影慢游”叙事角色。它适合承接酒店、套餐、路线和视觉统一阶段的静谧场景表达。',
+    tags: ['湖景度假', '游船观光', '自然生态'],
+    highlights: ['环湖游船', '观景平台', '湖心小岛', '湖畔民宿', '日落时刻'],
+    tips: ['建议游览半天至一天', '日落和晴天倒影更适合展示', '适合与酒店、摄影套餐联动', '夏季注意防晒'],
+    history:
+      '太平湖以“山中有湖，湖中有山”的格局闻名，是皖南旅游中承接度假与高品质自然体验的关键目的地。',
+    gallery: [IMAGES.lakeBoat, IMAGES.sunsetLake, IMAGES.lakeMountain, IMAGES.hiking],
+    bannerImage: IMAGES.sunsetLake,
+    cardImage: IMAGES.lakeBoat,
+    bestSeason: '4-6 月、9-11 月',
+    travelDuration: '一日游',
+    activities: [
+      { title: '环湖游船', description: '适合在答辩中呈现“山水度假”的大场景。', icon: '湖' },
+      { title: '湖景摄影', description: '倒影和晚霞是平台视觉表达的重要素材。', icon: '影' },
+      { title: '湖居休闲', description: '可与住宿模块形成自然联动。', icon: '宿' },
+      { title: '轻徒步观景', description: '在山湖交界处体验更放松的自然节奏。', icon: '游' },
+    ],
+  },
+  {
+    id: 'xuanzhi',
+    name: '宣纸文化园',
+    englishName: 'Xuanzhi Culture Park',
+    category: '非遗体验',
+    rating: 4.6,
+    reviews: 876,
+    priceLabel: '免费',
+    openingHours: '09:00 - 17:00',
+    address: '安徽省宣城市泾县宣纸文化产业园',
+    shortDescription: '把宣纸工艺、非遗手作与研学体验结合起来，补足平台的人文深度。',
+    longDescription:
+      '宣纸文化园是平台中非常重要的人文类场景，适合支撑亲子研学、文化体验、社区内容创作和路线设计，让平台不只停留在自然景观层面。',
+    tags: ['非遗体验', '宣纸文化', '研学亲子'],
+    highlights: ['宣纸工坊', '手作课堂', '非遗展陈', '文化讲堂'],
+    tips: ['建议安排 2-3 小时', '适合与亲子路线联动', '可作为答辩中的互动亮点', '全年皆可展示'],
+    history:
+      '泾县素有“中国宣纸之乡”之称。宣纸文化园通过现代展示与手作体验结合，为项目提供了极具辨识度的人文内容资源。',
+    gallery: [IMAGES.calligraphy, IMAGES.huizhouArch, IMAGES.tea, IMAGES.garden],
+    bannerImage: IMAGES.calligraphy,
+    cardImage: IMAGES.calligraphy,
+    bestSeason: '全年皆宜',
+    travelDuration: '2-3 小时',
+    activities: [
+      { title: '宣纸手作', description: '适合在前端展示中作为互动体验型模块。', icon: '纸' },
+      { title: '非遗展陈', description: '通过图文和器具展示宣纸工艺脉络。', icon: '展' },
+      { title: '亲子研学', description: '适合与家庭路线和社区内容联动。', icon: '学' },
+      { title: '文化讲堂', description: '为平台增加更完整的人文叙事层次。', icon: '讲' },
+    ],
+  },
+];
+
+export const scenicMap = Object.fromEntries(scenicData.map((item) => [item.id, item]));
+export const featuredScenicIds = ['taohuatan', 'chaji', 'taipinghu'];

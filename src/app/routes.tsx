@@ -15,8 +15,10 @@ import { OrderConfirm, PaymentPage, BookingSuccess, RefundPage, InvoicePage } fr
 import { CommunityHome } from './pages/community/CommunityHome';
 import { TravelogList, TravelogDetail, GuideList, GuideDetail, GalleryPage, PublishPage, AuthorProfile, CommentsPage, DraftsPage, ReportPage } from './pages/community/CommunityPages';
 import { LoginPage, RegisterPage } from './pages/user/AuthPages';
-import { UserLayout, UserDashboard, MyBookings, MyOrders, MyFavorites, MyComments, MyTravelogs, SettingsPage, MessagesPage, CouponsPage, InvoicesPage, SecurityPage, NotificationsPage, PrivacySettingsPage, LanguagePage } from './pages/user/UserCenter';
+import { UserLayout, UserDashboard, MyBookings, MyFavorites, MyComments, MyTravelogs, SettingsPage, MessagesPage, CouponsPage, InvoicesPage, SecurityPage, NotificationsPage, PrivacySettingsPage, LanguagePage } from './pages/user/UserCenter';
+import { UserOrdersPage } from './pages/user/UserOrdersPage';
 import { AboutPage, ContactPage, ContactSuccess, ServiceCenter, FAQPage, TransportPage, ParkingPage, AnnouncementsPage, AnnouncementDetail, PrivacyPolicyPage, TermsPage, NotFoundPage } from './pages/support/SupportPages';
+import { SearchPage } from './pages/SearchPage';
 
 export const router = createBrowserRouter([
   // Home with transparent header
@@ -37,7 +39,7 @@ export const router = createBrowserRouter([
     children: [
       { index: true, Component: UserDashboard },
       { path: 'bookings', Component: MyBookings },
-      { path: 'orders', Component: MyOrders },
+      { path: 'orders', Component: UserOrdersPage },
       { path: 'favorites', Component: MyFavorites },
       { path: 'comments', Component: MyComments },
       { path: 'travelogs', Component: MyTravelogs },
@@ -47,6 +49,7 @@ export const router = createBrowserRouter([
       { path: 'settings', Component: SettingsPage },
       { path: 'security', Component: SecurityPage },
       { path: 'notifications', Component: NotificationsPage },
+      { path: 'privacy', Component: PrivacySettingsPage },
       { path: 'privacy-settings', Component: PrivacySettingsPage },
       { path: 'language', Component: LanguagePage },
     ],
@@ -98,8 +101,7 @@ export const router = createBrowserRouter([
       { path: 'support/announcement/:id', Component: AnnouncementDetail },
       { path: 'support/privacy', Component: PrivacyPolicyPage },
       { path: 'support/terms', Component: TermsPage },
-      // Search placeholder
-      { path: 'search', Component: () => <div className="py-32 text-center"><h2 className="text-2xl font-bold mb-4" style={{ fontFamily: '"Noto Serif SC", serif' }}>搜索</h2><div className="max-w-lg mx-auto"><input className="w-full bg-white border border-gray-200 rounded-full px-6 py-4 text-sm focus:outline-none focus:ring-2 focus:ring-[#FFB114]/30" placeholder="搜索景点、路线、攻略..." /></div></div> },
+      { path: 'search', Component: SearchPage },
       // 404
       { path: '*', Component: NotFoundPage },
     ],

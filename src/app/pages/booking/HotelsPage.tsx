@@ -1,80 +1,202 @@
 import { useState } from 'react';
-import { Link } from 'react-router';
-import { Star, MapPin, Wifi, Coffee, Car, Filter } from 'lucide-react';
-import { PageBanner } from '../../components/shared/PageBanner';
-import { IMAGES } from '../../components/shared/images';
+import { useNavigate } from 'react-router';
+import { Filter, MapPin, Star } from 'lucide-react';
+import { toast } from 'sonner';
 import { ImageWithFallback } from '../../components/figma/ImageWithFallback';
+import { PageBanner } from '../../components/shared/PageBanner';
+import { buildHotelDraft, getUpcomingBookingDates, hotelData } from '../../data/booking';
+import { useDemoApp } from '../../providers/DemoAppProvider';
 
-const HOTELS = [
-  { id: 1, name: '桃花潭度假酒店', type: '星级酒店', rating: 4.8, reviews: 326, price: 588, original: 788, image: IMAGES.hotel, location: '桃花潭景区旁', amenities: ['WiFi', '早餐', '停车', '空调'], rooms: [{ name: '豪华大床房', price: 588 }, { name: '山景双床房', price: 688 }, { name: '湖景套房', price: 988 }] },
-  { id: 2, name: '查济古韵民宿', type: '特色民宿', rating: 4.9, reviews: 218, price: 388, original: 488, image: IMAGES.bridgeVillage, location: '查济古村内', amenities: ['WiFi', '早餐', '茶室'], rooms: [{ name: '徽派标间', price: 388 }, { name: '古韵大床房', price: 488 }, { name: '院景套房', price: 688 }] },
-  { id: 3, name: '太平湖畔客栈', type: '湖景民宿', rating: 4.7, reviews: 156, price: 458, original: 558, image: IMAGES.sunsetLake, location: '太平湖景区', amenities: ['WiFi', '湖景', '停车', '钓鱼'], rooms: [{ name: '湖景标间', price: 458 }, { name: '湖景大床房', price: 558 }] },
-  { id: 4, name: '泾县文旅大酒店', type: '商务酒店', rating: 4.5, reviews: 432, price: 288, original: 398, image: IMAGES.huizhouArch, location: '泾县城区', amenities: ['WiFi', '早餐', '停车', '健身'], rooms: [{ name: '商务标间', price: 288 }, { name: '商务大床', price: 358 }] },
-];
-
-const FILTERS = ['全部', '星级酒店', '特色民宿', '湖景民宿', '商务酒店'];
+const DATE_OPTIONS = getUpcomingBookingDates(10);
+const FILTERS = ['全部', '湖景度假酒店', '徽派精品民宿', '湖景轻度假民宿', '城市配套酒店'];
 
 export function HotelsPage() {
+  const navigate = useNavigate();
+  const { saveBookingDraft } = useDemoApp();
   const [activeFilter, setActiveFilter] = useState('全部');
-  const filtered = HOTELS.filter(h => activeFilter === '全部' || h.type === activeFilter);
+  const [checkInDate, setCheckInDate] = useState(DATE_OPTIONS[0].value);
+  const [nights, setNights] = useState(1);
+  const [roomCount, setRoomCount] = useState(1);
+
+  const filteredHotels = hotelData.filter(
+    (hotel) => activeFilter === '全部' || hotel.type === activeFilter,
+  );
+
+  const handleBookRoom = (hotelId: string, roomId: string) => {
+    const hotel = hotelData.find((item) => item.id === hotelId);
+    if (!hotel) {
+      toast.error('当前房型信息不存在，请重新选择。');
+      return;
+    }
+
+    saveBookingDraft(buildHotelDraft({ hotel, roomId, checkInDate, nights, roomCount }));
+    navigate('/booking/confirm');
+  };
 
   return (
     <div>
-      <PageBanner image={IMAGES.hotel} title="酒店民宿" subtitle="精选品质住宿，感受徽派生活" breadcrumbs={[{ label: '首页', path: '/' }, { label: '在线预约', path: '/booking' }, { label: '酒店民宿' }]} />
+      <PageBanner
+        image={hotelData[0].image}
+        title="酒店民宿预约"
+        subtitle="用于展示桃花潭、查济与太平湖周边的演示住宿产品，可直接进入确认页。"
+        breadcrumbs={[
+          { label: '首页', path: '/' },
+          { label: '在线预约', path: '/booking' },
+          { label: '酒店民宿' },
+        ]}
+      />
 
-      <section className="py-8 px-8 bg-white border-b border-gray-100">
-        <div className="max-w-[1280px] mx-auto flex gap-3 flex-wrap items-center">
-          <Filter className="w-4 h-4 text-gray-400" />
-          {FILTERS.map(f => (
-            <button key={f} onClick={() => setActiveFilter(f)} className={`px-4 py-2 rounded-full text-sm transition-all ${activeFilter === f ? 'bg-[#FFB114] text-white' : 'bg-gray-100 text-gray-600 hover:bg-gray-200'}`}>{f}</button>
-          ))}
+      <section className="border-b border-gray-100 bg-white px-8 py-8">
+        <div className="mx-auto grid max-w-[1280px] grid-cols-1 gap-4 xl:grid-cols-[1.3fr_1fr_auto_auto] xl:items-center">
+          <div className="flex flex-wrap items-center gap-3">
+            <Filter className="h-4 w-4 text-[#7A868B]" />
+            {FILTERS.map((filter) => (
+              <button
+                key={filter}
+                type="button"
+                onClick={() => setActiveFilter(filter)}
+                className={`rounded-full px-4 py-2 text-sm ${
+                  activeFilter === filter
+                    ? 'bg-[#486B72] text-white'
+                    : 'bg-[#F3F4F4] text-[#52636A] hover:bg-[#E8EBEB]'
+                }`}
+              >
+                {filter}
+              </button>
+            ))}
+          </div>
+
+          <label className="flex items-center gap-3 rounded-full border border-[#E8E1D2] bg-[#FAF7F1] px-4 py-3 text-sm text-[#52636A]">
+            <span>入住日期</span>
+            <select
+              value={checkInDate}
+              onChange={(event) => setCheckInDate(event.target.value)}
+              className="bg-transparent text-[#24343B] outline-none"
+            >
+              {DATE_OPTIONS.map((option) => (
+                <option key={option.value} value={option.value}>
+                  {option.value} {option.weekday}
+                </option>
+              ))}
+            </select>
+          </label>
+
+          <label className="flex items-center gap-3 rounded-full border border-[#E8E1D2] bg-[#FAF7F1] px-4 py-3 text-sm text-[#52636A]">
+            <span>住几晚</span>
+            <select
+              value={nights}
+              onChange={(event) => setNights(Number(event.target.value))}
+              className="bg-transparent text-[#24343B] outline-none"
+            >
+              {[1, 2, 3].map((value) => (
+                <option key={value} value={value}>
+                  {value} 晚
+                </option>
+              ))}
+            </select>
+          </label>
+
+          <label className="flex items-center gap-3 rounded-full border border-[#E8E1D2] bg-[#FAF7F1] px-4 py-3 text-sm text-[#52636A]">
+            <span>房间数</span>
+            <select
+              value={roomCount}
+              onChange={(event) => setRoomCount(Number(event.target.value))}
+              className="bg-transparent text-[#24343B] outline-none"
+            >
+              {[1, 2, 3].map((value) => (
+                <option key={value} value={value}>
+                  {value} 间
+                </option>
+              ))}
+            </select>
+          </label>
         </div>
       </section>
 
-      <section className="py-12 px-8">
-        <div className="max-w-[1280px] mx-auto space-y-6">
-          {filtered.map(hotel => (
-            <div key={hotel.id} className="bg-white rounded-2xl overflow-hidden shadow-sm border border-gray-100 hover:shadow-lg transition-shadow">
+      <section className="px-8 py-12">
+        <div className="mx-auto max-w-[1280px] space-y-6">
+          {filteredHotels.map((hotel) => (
+            <article
+              key={hotel.id}
+              className="overflow-hidden rounded-[30px] border border-gray-100 bg-white shadow-sm hover:shadow-lg"
+            >
               <div className="flex flex-col md:flex-row">
-                <div className="md:w-80 h-56 md:h-auto shrink-0 overflow-hidden">
-                  <ImageWithFallback src={hotel.image} alt={hotel.name} className="w-full h-full object-cover" />
+                <div className="h-64 shrink-0 overflow-hidden md:h-auto md:w-80">
+                  <ImageWithFallback
+                    src={hotel.image}
+                    alt={hotel.name}
+                    className="h-full w-full object-cover"
+                  />
                 </div>
                 <div className="flex-1 p-8">
-                  <div className="flex items-start justify-between mb-3">
+                  <div className="flex flex-col gap-5 xl:flex-row xl:items-start xl:justify-between">
                     <div>
-                      <div className="flex items-center gap-2 mb-1">
-                        <h3 className="text-xl font-bold" style={{ fontFamily: '"Noto Serif SC", serif' }}>{hotel.name}</h3>
-                        <span className="text-xs bg-[#0077B3]/10 text-[#0077B3] px-2 py-0.5 rounded-full">{hotel.type}</span>
+                      <div className="flex flex-wrap items-center gap-3">
+                        <h2 className="text-2xl font-bold text-[#24343B]">{hotel.name}</h2>
+                        <span className="rounded-full bg-[#E8F1F2] px-3 py-1 text-xs text-[#486B72]">
+                          {hotel.type}
+                        </span>
                       </div>
-                      <div className="flex items-center gap-4 text-sm text-gray-400">
-                        <span className="flex items-center gap-1"><Star className="w-3.5 h-3.5 text-[#FFB114] fill-[#FFB114]" />{hotel.rating} ({hotel.reviews}条)</span>
-                        <span className="flex items-center gap-1"><MapPin className="w-3.5 h-3.5" />{hotel.location}</span>
+                      <div className="mt-3 flex flex-wrap items-center gap-5 text-sm text-[#66767D]">
+                        <span className="inline-flex items-center gap-1">
+                          <Star className="h-4 w-4 fill-[#C9932C] text-[#C9932C]" />
+                          {hotel.rating}（{hotel.reviews} 条）
+                        </span>
+                        <span className="inline-flex items-center gap-1">
+                          <MapPin className="h-4 w-4" />
+                          {hotel.location}
+                        </span>
+                      </div>
+                      <p className="mt-4 max-w-3xl text-sm leading-7 text-[#52636A]">
+                        {hotel.description}
+                      </p>
+                      <div className="mt-4 flex flex-wrap gap-2">
+                        {hotel.amenities.map((item) => (
+                          <span
+                            key={item}
+                            className="rounded-full border border-[#E8E1D2] bg-[#FAF7F1] px-3 py-1 text-xs text-[#7A868B]"
+                          >
+                            {item}
+                          </span>
+                        ))}
                       </div>
                     </div>
-                    <div className="text-right">
-                      <span className="text-gray-300 text-sm line-through">¥{hotel.original}</span>
-                      <p className="text-2xl font-bold text-[#FFB114]">¥{hotel.price}<span className="text-xs text-gray-400 font-normal">起/晚</span></p>
+                    <div className="rounded-[22px] bg-[#FAF7F1] px-5 py-4 text-right">
+                      <p className="text-sm text-[#7A868B]">参考起价</p>
+                      <p className="mt-1 text-3xl font-bold text-[#C9932C]">￥{hotel.price}</p>
+                      <p className="mt-1 text-xs text-gray-300 line-through">￥{hotel.originalPrice}</p>
                     </div>
                   </div>
-                  <div className="flex gap-3 mb-4">
-                    {hotel.amenities.map(a => (
-                      <span key={a} className="text-xs bg-gray-50 text-gray-500 px-3 py-1 rounded-full border border-gray-100">{a}</span>
-                    ))}
-                  </div>
-                  <div className="space-y-2 mb-4">
-                    {hotel.rooms.map(r => (
-                      <div key={r.name} className="flex items-center justify-between bg-gray-50 rounded-lg px-4 py-2">
-                        <span className="text-sm">{r.name}</span>
-                        <div className="flex items-center gap-4">
-                          <span className="font-bold text-[#FFB114]">¥{r.price}/晚</span>
-                          <Link to="/booking/confirm" className="bg-[#FFB114] hover:bg-[#e9a010] text-white text-xs px-4 py-1.5 rounded-full transition-colors">预订</Link>
+
+                  <div className="mt-6 space-y-3">
+                    {hotel.rooms.map((room) => (
+                      <div
+                        key={room.id}
+                        className="flex flex-col gap-4 rounded-[22px] bg-[#F7F8F8] px-5 py-4 md:flex-row md:items-center md:justify-between"
+                      >
+                        <div>
+                          <h3 className="text-sm font-bold text-[#24343B]">{room.name}</h3>
+                          <p className="mt-1 text-xs text-[#7A868B]">{room.bedType}</p>
+                        </div>
+                        <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
+                          <div className="text-sm text-[#52636A]">
+                            <span className="font-bold text-[#C9932C]">￥{room.price * nights}</span>
+                            <span className="text-xs text-[#7A868B]"> / 间</span>
+                          </div>
+                          <button
+                            type="button"
+                            onClick={() => handleBookRoom(hotel.id, room.id)}
+                            className="rounded-full bg-[#C9932C] px-5 py-2 text-sm font-semibold text-white hover:bg-[#b58323]"
+                          >
+                            预约该房型
+                          </button>
                         </div>
                       </div>
                     ))}
                   </div>
                 </div>
               </div>
-            </div>
+            </article>
           ))}
         </div>
       </section>
